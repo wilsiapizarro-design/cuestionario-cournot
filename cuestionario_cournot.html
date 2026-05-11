@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuestionario — Modelo de Cournot</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f0;color:#1a1a1a;min-height:100vh;padding:2rem 1rem}
+  .container{max-width:720px;margin:0 auto}
+  h1{font-size:24px;font-weight:600;color:#1a1a1a;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:24px}
+  .score-bar{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:16px}
+  .score-num{font-size:28px;font-weight:600;color:#1a1a1a;min-width:60px}
+  .score-label{font-size:13px;color:#666;margin-bottom:6px}
+  .progress-track{flex:1;height:8px;background:#e5e5e5;border-radius:4px;overflow:hidden}
+  .progress-fill{height:100%;width:0%;background:#3B6D11;border-radius:4px;transition:width .4s ease}
+  .section-label{font-size:12px;font-weight:600;color:#888;letter-spacing:.06em;text-transform:uppercase;margin:0 0 14px}
+  .q-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:20px;margin-bottom:14px}
+  .q-num{font-size:11px;font-weight:600;color:#aaa;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .badge-new{background:#E6F1FB;color:#185FA5;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px}
+  .q-text{font-size:15px;color:#1a1a1a;line-height:1.65;margin-bottom:16px}
+  .g-text{font-size:14px;color:#333;line-height:1.6;margin:10px 0 14px}
+  .opts{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .opts li button{width:100%;text-align:left;background:#f9f9f7;border:1px solid #e5e5e5;border-radius:8px;padding:10px 14px;font-size:14px;color:#1a1a1a;cursor:pointer;transition:background .15s,border-color .15s;line-height:1.5}
+  .opts li button:hover:not(:disabled){background:#f0f0ec;border-color:#ccc}
+  .opts li button:disabled{cursor:default}
+  .opts li button.correct{background:#EAF3DE;border-color:#639922;color:#27500A}
+  .opts li button.wrong{background:#FCEBEB;border-color:#E24B4A;color:#791F1F}
+  .feedback{font-size:13px;margin-top:12px;padding:10px 12px;border-radius:8px;line-height:1.6;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:#EAF3DE;color:#27500A;border:1px solid #97C459}
+  .feedback.no{background:#FCEBEB;color:#791F1F;border:1px solid #F09595}
+  .divider{border:none;border-top:1px solid #e5e5e5;margin:28px 0 20px}
+  svg.grf{display:block;margin:0 auto 12px;max-width:100%}
+  .final-msg{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:24px;text-align:center;margin-top:20px;display:none}
+  .final-msg h2{font-size:20px;font-weight:600;margin-bottom:8px}
+  .final-msg p{font-size:15px;color:#555}
+  .final-score{font-size:48px;font-weight:700;color:#3B6D11;margin:12px 0}
+  @media(max-width:480px){body{padding:1rem .5rem}.q-card{padding:16px}}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Cuestionario — Modelo de Cournot</h1>
+  <p class="subtitle">Organización Industrial · Universidad Católica del Norte · 11 preguntas</p>
+
+  <div class="score-bar">
+    <div>
+      <div class="score-label">Respuestas correctas</div>
+      <div class="score-num" id="sdisplay">0 / 11</div>
+    </div>
+    <div style="flex:1">
+      <div class="progress-track"><div class="progress-fill" id="sprog"></div></div>
+    </div>
+  </div>
+
+  <p class="section-label">Parte I — Preguntas de teoría</p>
+
+  <!-- Q1 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 1</div>
+    <p class="q-text">En el modelo de Cournot, el equilibrio de Nash-Cournot implica que ambas empresas eligen cantidades donde:</p>
+    <ul class="opts">
+      <li><button onclick="ans(this,false,'q1')">a) Cada empresa iguala su ingreso total al costo total del rival.</button></li>
+      <li><button onclick="ans(this,true,'q1')">b) Cada empresa maximiza su propio beneficio dado lo que produce la otra, y ninguna tiene incentivo a desviarse.</button></li>
+      <li><button onclick="ans(this,false,'q1')">c) Las dos empresas producen exactamente la cantidad de monopolio repartida en partes iguales.</button></li>
+      <li><button onclick="ans(this,false,'q1')">d) El precio de mercado se iguala al costo marginal de ambas firmas simultáneamente.</button></li>
+    </ul>
+    <div class="feedback" id="fb-q1"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 2 <span class="badge-new">nueva</span></div>
+    <p class="q-text">El modelo de Cournot se clasifica como un oligopolio donde las empresas compiten:</p>
+    <ul class="opts">
+      <li><button onclick="ans(this,false,'q2')">a) De forma secuencial fijando precios, una después de la otra.</button></li>
+      <li><button onclick="ans(this,false,'q2')">b) De forma secuencial eligiendo cantidades: primero el líder y luego el seguidor.</button></li>
+      <li><button onclick="ans(this,true,'q2')">c) De forma simultánea eligiendo cantidades: cada empresa decide cuánto producir sin conocer la decisión de la rival.</button></li>
+      <li><button onclick="ans(this,false,'q2')">d) De forma simultánea fijando precios, lo que lleva al precio competitivo.</button></li>
+    </ul>
+    <div class="feedback" id="fb-q2"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 3</div>
+    <p class="q-text">¿Cuál es el efecto correcto sobre la función de reacción de la empresa 1 si la empresa 2 aumenta su producción (q₂ ↑)?</p>
+    <ul class="opts">
+      <li><button onclick="ans(this,false,'q3')">a) La empresa 1 también aumenta su producción porque el mercado crece.</button></li>
+      <li><button onclick="ans(this,false,'q3')">b) La empresa 1 mantiene su producción constante, ya que sus costos no cambian.</button></li>
+      <li><button onclick="ans(this,true,'q3')">c) La empresa 1 reduce su producción óptima, pues la demanda residual que enfrenta se desplaza a la izquierda.</button></li>
+      <li><button onclick="ans(this,false,'q3')">d) La empresa 1 abandona el mercado si q₂ supera la cantidad de competencia perfecta.</button></li>
+    </ul>
+    <div class="feedback" id="fb-q3"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 4</div>
+    <p class="q-text">En un duopolio de Cournot con costos asimétricos (c₁ &lt; c₂), ¿cuál es la consecuencia directa en el equilibrio?</p>
+    <ul class="opts">
+      <li><button onclick="ans(this,false,'q4')">a) Ambas empresas producen la misma cantidad porque el precio de mercado es único.</button></li>
+      <li><button onclick="ans(this,true,'q4')">b) La empresa con menor costo marginal produce una mayor cantidad de equilibrio que la empresa con mayor costo.</button></li>
+      <li><button onclick="ans(this,false,'q4')">c) La empresa más eficiente expulsa a la otra del mercado inmediatamente.</button></li>
+      <li><button onclick="ans(this,false,'q4')">d) El precio de equilibrio cae hasta el costo marginal de la empresa más eficiente.</button></li>
+    </ul>
+    <div class="feedback" id="fb-q4"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 5</div>
+    <p class="q-text">En la colusión dentro del modelo de Cournot con costos simétricos, ¿qué produce cada empresa y qué ocurre con el bienestar?</p>
+    <ul class="opts">
+      <li><button onclick="ans(this,false,'q5')">a) Cada empresa produce la cantidad de competencia perfecta; el bienestar aumenta al máximo.</button></li>
+      <li><button onclick="ans(this,false,'q5')">b) Cada empresa produce dos tercios de la cantidad de Cournot; el bienestar no varía.</button></li>
+      <li><button onclick="ans(this,true,'q5')">c) Cada empresa produce la mitad de la cantidad de monopolio (Q_M/2); el precio sube y el bienestar cae más que en Cournot.</button></li>
+      <li><button onclick="ans(this,false,'q5')">d) Cada empresa produce la cantidad de Cournot; el precio de colusión iguala el costo marginal.</button></li>
+    </ul>
+    <div class="feedback" id="fb-q5"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 6</div>
+    <p class="q-text">La pérdida de eficiencia social (peso muerto) en el equilibrio de Cournot se calcula como:</p>
+    <ul class="opts">
+      <li><button onclick="ans(this,false,'q6')">a) La diferencia entre los beneficios de las dos empresas.</button></li>
+      <li><button onclick="ans(this,false,'q6')">b) El área entre la curva de demanda y el eje de cantidades desde 0 hasta Q_Cournot.</button></li>
+      <li><button onclick="ans(this,true,'q6')">c) El triángulo ½ · (P_NC − c) · (Q_CP − Q_NC), donde Q_CP es la cantidad de competencia perfecta.</button></li>
+      <li><button onclick="ans(this,false,'q6')">d) La suma de los beneficios individuales menos el excedente del consumidor total.</button></li>
+    </ul>
+    <div class="feedback" id="fb-q6"></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 7</div>
+    <p class="q-text">Si la empresa 2 produjera exactamente la cantidad de competencia perfecta (Q_CP), ¿qué debería hacer la empresa 1 según su función de reacción?</p>
+    <ul class="opts">
+      <li><button onclick="ans(this,false,'q7')">a) Producir la cantidad de monopolio, porque tiene el campo libre para fijar precios.</button></li>
+      <li><button onclick="ans(this,false,'q7')">b) Producir la misma cantidad que la empresa 2 para mantener paridad de mercado.</button></li>
+      <li><button onclick="ans(this,true,'q7')">c) No producir nada (q₁ = 0), porque su demanda residual queda siempre por debajo del costo marginal y cualquier producción generaría pérdidas.</button></li>
+      <li><button onclick="ans(this,false,'q7')">d) Producir la mitad de Q_CP para capturar parte del excedente restante.</button></li>
+    </ul>
+    <div class="feedback" id="fb-q7"></div>
+  </div>
+
+  <hr class="divider">
+  <p class="section-label">Parte II — Interpretación de gráficos</p>
+
+  <!-- Q8 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 8</div>
+    <svg class="grf" width="300" height="260" viewBox="0 0 300 260" role="img" aria-label="Funciones de reacción Cournot">
+      <line x1="40" y1="220" x2="280" y2="220" stroke="#888" stroke-width="1.2"/>
+      <line x1="40" y1="220" x2="40" y2="20" stroke="#888" stroke-width="1.2"/>
+      <text x="285" y="224" font-size="12" fill="#666">q₂</text>
+      <text x="28" y="15" font-size="12" fill="#666">q₁</text>
+      <line x1="40" y1="40" x2="240" y2="220" stroke="#3266ad" stroke-width="2"/>
+      <text x="243" y="224" font-size="11" fill="#3266ad">FR₁</text>
+      <line x1="40" y1="220" x2="240" y2="40" stroke="#D85A30" stroke-width="2"/>
+      <text x="242" y="35" font-size="11" fill="#D85A30">FR₂</text>
+      <circle cx="140" cy="120" r="5" fill="#3B6D11"/>
+      <text x="146" y="115" font-size="12" font-weight="600" fill="#1a1a1a">E</text>
+      <text x="34" y="42" font-size="10" fill="#888">Q_M</text>
+      <text x="228" y="218" font-size="10" fill="#888">Q_M</text>
+      <line x1="40" y1="120" x2="140" y2="120" stroke="#bbb" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <line x1="140" y1="120" x2="140" y2="220" stroke="#bbb" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text x="20" y="124" font-size="10" fill="#888">q₁*</text>
+      <text x="133" y="234" font-size="10" fill="#888">q₂*</text>
+    </svg>
+    <p class="g-text">Las curvas FR₁ (azul) y FR₂ (naranja) son las funciones de reacción de cada empresa. ¿Qué representa el punto E y por qué con costos simétricos se ubica sobre la diagonal q₁ = q₂?</p>
+    <ul class="opts">
+      <li><button onclick="ans(this,false,'q8')">a) Es el punto de colusión donde las empresas maximizan el beneficio conjunto.</button></li>
+      <li><button onclick="ans(this,false,'q8')">b) Es el punto donde el precio de mercado es igual al costo marginal de ambas empresas.</button></li>
+      <li><button onclick="ans(this,true,'q8')">c) Es el equilibrio de Nash-Cournot: cada empresa elige su mejor respuesta dada la producción de la otra, y con costos simétricos ambas producen la misma cantidad (q₁* = q₂*).</button></li>
+      <li><button onclick="ans(this,false,'q8')">d) Es el punto de Stackelberg donde la empresa líder maximiza su isobeneficio.</button></li>
+    </ul>
+    <div class="feedback" id="fb-q8"></div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 9</div>
+    <svg class="grf" width="300" height="240" viewBox="0 0 300 240" role="img" aria-label="Demanda residual empresa 1">
+      <line x1="30" y1="210" x2="280" y2="210" stroke="#888" stroke-width="1.2"/>
+      <line x1="30" y1="210" x2="30" y2="20" stroke="#888" stroke-width="1.2"/>
+      <text x="282" y="214" font-size="11" fill="#666">Q</text>
+      <text x="18" y="16" font-size="11" fill="#666">P</text>
+      <line x1="30" y1="30" x2="270" y2="210" stroke="#3266ad" stroke-width="2"/>
+      <text x="272" y="206" font-size="11" fill="#3266ad">D(Q)</text>
+      <line x1="30" y1="90" x2="210" y2="210" stroke="#D85A30" stroke-width="2"/>
+      <text x="212" y="206" font-size="11" fill="#D85A30">d₁(q₂)</text>
+      <line x1="30" y1="90" x2="120" y2="210" stroke="#3B6D11" stroke-width="2"/>
+      <text x="122" y="206" font-size="11" fill="#3B6D11">IMg₁</text>
+      <line x1="30" y1="155" x2="270" y2="155" stroke="#E24B4A" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="273" y="159" font-size="11" fill="#E24B4A">c</text>
+      <line x1="75" y1="155" x2="75" y2="210" stroke="#bbb" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text x="67" y="224" font-size="10" fill="#888">q₁*</text>
+    </svg>
+    <p class="g-text">El gráfico muestra D(Q), la demanda residual d₁(q₂) y el IMg₁ de la empresa 1. ¿Por qué la demanda residual se desplaza hacia la izquierda y cómo se determina q₁*?</p>
+    <ul class="opts">
+      <li><button onclick="ans(this,false,'q9')">a) La empresa 2 fija un precio más alto, lo que reduce la demanda total del bien.</button></li>
+      <li><button onclick="ans(this,true,'q9')">b) La empresa 2 ya produce q₂ unidades, por lo que la empresa 1 solo puede vender la demanda no cubierta; q₁* se halla donde IMg₁ = c.</button></li>
+      <li><button onclick="ans(this,false,'q9')">c) El gobierno impone una cuota de producción a la empresa 1, reduciendo su demanda efectiva.</button></li>
+      <li><button onclick="ans(this,false,'q9')">d) La empresa 1 decide voluntariamente limitar su producción para no competir con la empresa 2.</button></li>
+    </ul>
+    <div class="feedback" id="fb-q9"></div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 10</div>
+    <svg class="grf" width="300" height="240" viewBox="0 0 300 240" role="img" aria-label="Comparación monopolio Cournot competencia perfecta">
+      <line x1="30" y1="210" x2="280" y2="210" stroke="#888" stroke-width="1.2"/>
+      <line x1="30" y1="210" x2="30" y2="20" stroke="#888" stroke-width="1.2"/>
+      <text x="282" y="214" font-size="11" fill="#666">Q</text>
+      <text x="18" y="16" font-size="11" fill="#666">P</text>
+      <line x1="30" y1="30" x2="270" y2="210" stroke="#3266ad" stroke-width="2"/>
+      <line x1="30" y1="160" x2="270" y2="160" stroke="#E24B4A" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="273" y="163" font-size="11" fill="#E24B4A">c</text>
+      <line x1="90" y1="90" x2="90" y2="210" stroke="#bbb" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text x="78" y="224" font-size="9" fill="#888">Q_M</text>
+      <line x1="30" y1="90" x2="90" y2="90" stroke="#bbb" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text x="0" y="93" font-size="9" fill="#888">P_M</text>
+      <line x1="150" y1="120" x2="150" y2="210" stroke="#bbb" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text x="135" y="224" font-size="9" fill="#888">Q_NC</text>
+      <line x1="30" y1="120" x2="150" y2="120" stroke="#bbb" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text x="0" y="123" font-size="9" fill="#888">P_NC</text>
+      <line x1="210" y1="160" x2="210" y2="210" stroke="#bbb" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text x="198" y="224" font-size="9" fill="#888">Q_CP</text>
+      <polygon points="150,120 210,160 150,160" fill="rgba(250,199,117,0.35)" stroke="#BA7517" stroke-width="0.8"/>
+      <circle cx="90" cy="90" r="4" fill="#3B6D11"/>
+      <circle cx="150" cy="120" r="4" fill="#3B6D11"/>
+      <circle cx="210" cy="160" r="4" fill="#3B6D11"/>
+    </svg>
+    <p class="g-text">El triángulo sombreado entre Q_NC y Q_CP representa la pérdida de bienestar de Cournot. ¿Por qué Q_NC es mayor que en monopolio pero menor que en competencia perfecta?</p>
+    <ul class="opts">
+      <li><button onclick="ans(this,false,'q10')">a) Porque en Cournot las empresas acuerdan producir exactamente el promedio entre ambos extremos.</button></li>
+      <li><button onclick="ans(this,true,'q10')">b) Porque en Cournot las empresas tienen poder de mercado (P &gt; c) y restringen producción, pero la rivalidad entre ellas las empuja a producir más que un monopolista puro.</button></li>
+      <li><button onclick="ans(this,false,'q10')">c) Porque el gobierno regula la cantidad en Cournot para que se ubique entre monopolio y competencia.</button></li>
+      <li><button onclick="ans(this,false,'q10')">d) Porque las funciones de reacción tienen pendiente positiva, lo que empuja la producción hacia niveles intermedios.</button></li>
+    </ul>
+    <div class="feedback" id="fb-q10"></div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="q-card">
+    <div class="q-num">Pregunta 11</div>
+    <svg class="grf" width="300" height="260" viewBox="0 0 300 260" role="img" aria-label="Dinámica de ajuste con flechas convergiendo al equilibrio E">
+      <defs>
+        <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#E24B4A"/>
+        </marker>
+      </defs>
+      <line x1="40" y1="220" x2="280" y2="220" stroke="#888" stroke-width="1.2"/>
+      <line x1="40" y1="220" x2="40" y2="20" stroke="#888" stroke-width="1.2"/>
+      <text x="285" y="224" font-size="12" fill="#666">q₂</text>
+      <text x="28" y="15" font-size="12" fill="#666">q₁</text>
+      <line x1="40" y1="40" x2="240" y2="220" stroke="#3266ad" stroke-width="2"/>
+      <text x="243" y="224" font-size="11" fill="#3266ad">FR₁</text>
+      <line x1="40" y1="220" x2="240" y2="40" stroke="#D85A30" stroke-width="2"/>
+      <text x="242" y="35" font-size="11" fill="#D85A30">FR₂</text>
+      <circle cx="140" cy="120" r="5" fill="#3B6D11"/>
+      <text x="146" y="115" font-size="12" font-weight="600" fill="#1a1a1a">E</text>
+      <circle cx="210" cy="220" r="4" fill="#D85A30"/>
+      <text x="204" y="234" font-size="10" fill="#D85A30">q₂⁰</text>
+      <line x1="210" y1="218" x2="210" y2="150" stroke="#E24B4A" stroke-width="1.8" marker-end="url(#arr)"/>
+      <line x1="208" y1="150" x2="160" y2="150" stroke="#E24B4A" stroke-width="1.8" marker-end="url(#arr)"/>
+      <line x1="160" y1="148" x2="160" y2="128" stroke="#E24B4A" stroke-width="1.8" marker-end="url(#arr)"/>
+      <line x1="158" y1="128" x2="145" y2="128" stroke="#E24B4A" stroke-width="1.8" marker-end="url(#arr)"/>
+      <line x1="40" y1="120" x2="140" y2="120" stroke="#bbb" stroke-width="0.7" stroke-dasharray="3,3"/>
+      <line x1="140" y1="120" x2="140" y2="220" stroke="#bbb" stroke-width="0.7" stroke-dasharray="3,3"/>
+      <text x="20" y="124" font-size="9" fill="#888">q₁*</text>
+      <text x="133" y="234" font-size="9" fill="#888">q₂*</text>
+    </svg>
+    <p class="g-text">Las flechas rojas muestran el proceso de ajuste desde q₂⁰ hacia E. ¿Qué describe este proceso y cuál es su resultado final?</p>
+    <ul class="opts">
+      <li><button onclick="ans(this,false,'q11')">a) Las empresas negocian explícitamente hasta acordar las cantidades de colusión en el punto E.</button></li>
+      <li><button onclick="ans(this,false,'q11')">b) El gobierno interviene reduciendo la producción de la empresa 2 en cada período hasta alcanzar el equilibrio.</button></li>
+      <li><button onclick="ans(this,true,'q11')">c) Cada empresa ajusta su producción respondiendo a la cantidad observada de la rival (mejor respuesta iterada); el proceso converge al equilibrio de Nash-Cournot E, donde ninguna quiere cambiar.</button></li>
+      <li><button onclick="ans(this,false,'q11')">d) La empresa 2 reduce producción voluntariamente para evitar pérdidas, mientras la empresa 1 no cambia su estrategia.</button></li>
+    </ul>
+    <div class="feedback" id="fb-q11"></div>
+  </div>
+
+  <div class="final-msg" id="final">
+    <h2>Cuestionario completado</h2>
+    <div class="final-score" id="final-score"></div>
+    <p id="final-msg"></p>
+  </div>
+
+</div>
+
+<script>
+const FBK = {
+  q1:{ok:"Correcto. En el equilibrio de Nash-Cournot cada empresa está en su mejor respuesta frente a la del rival: no existe incentivo unilateral a cambiar la cantidad producida.",no:"Incorrecto. El equilibrio de Nash-Cournot no implica igualar ingresos a costos del rival ni producir la cantidad de monopolio repartida. La clave es la maximización individual dado lo que hace el otro."},
+  q2:{ok:"Correcto. Cournot es un modelo de competencia simultánea en cantidades: ambas empresas eligen q₁ y q₂ al mismo tiempo sin conocer la decisión de la rival. Esto lo diferencia de Stackelberg (secuencial en cantidades) y de Bertrand (simultáneo en precios).",no:"Incorrecto. El rasgo definitorio de Cournot es que la competencia es simultánea (no secuencial) y la variable estratégica es la cantidad (no el precio). En Stackelberg hay un líder que mueve primero; en Bertrand se compite en precios."},
+  q3:{ok:"Correcto. Cuando q₂ aumenta, la demanda residual de la empresa 1 se desplaza a la izquierda, reduciendo el IMg₁ y su producción óptima. Por eso la función de reacción tiene pendiente negativa.",no:"Incorrecto. La función de reacción de Cournot tiene pendiente negativa: si el rival produce más, la empresa reduce su propia producción (sustitución estratégica)."},
+  q4:{ok:"Correcto. Con costos asimétricos (c₁ < c₂), al resolver el sistema de funciones de reacción se obtiene q₁* > q₂*. La empresa más eficiente produce más en equilibrio.",no:"Incorrecto. En Cournot con costos asimétricos la empresa de menor costo produce más, pero no expulsa a la otra ni el precio cae al costo marginal de nadie (eso sería Bertrand)."},
+  q5:{ok:"Correcto. En la colusión con costos simétricos las empresas actúan como un monopolio conjunto: cada una produce Q_M/2, lo que implica menor producción, mayor precio y más pérdida de bienestar que en Cournot.",no:"Incorrecto. La colusión replica el resultado de monopolio. Cada empresa produce Q_M/2 = (a−c)/(4b)."},
+  q6:{ok:"Correcto. La pérdida de eficiencia es el triángulo: PE = ½ · (P_NC − c) · (Q_CP − Q_NC).",no:"Incorrecto. El peso muerto de Cournot es el triángulo entre P_NC, c y la diferencia (Q_CP − Q_NC). No se calcula comparando beneficios de las firmas."},
+  q7:{ok:"Correcto. Si la empresa 2 produce Q_CP, el precio ya iguala el costo marginal. La demanda residual de la empresa 1 queda por debajo de c en todo punto, por lo que producir generaría pérdidas. La mejor respuesta es q₁ = 0.",no:"Incorrecto. Si el rival satura el mercado con Q_CP, no hay margen positivo para la empresa 1. Producir cualquier cantidad generaría pérdidas."},
+  q8:{ok:"Correcto. El punto E es el equilibrio de Nash-Cournot: intersección de las dos funciones de reacción. Con costos simétricos la solución da q₁* = q₂*, que es donde la diagonal cruza las curvas.",no:"Incorrecto. E no es la colusión ni el equilibrio de Stackelberg. Es el punto de mejor respuesta mutua (Nash-Cournot)."},
+  q9:{ok:"Correcto. La empresa 2 ya colocó q₂ en el mercado, por lo que la empresa 1 solo puede vender la demanda remanente. Su demanda residual d₁(q₂) = a − b(q₁+q₂) se desplaza a la izquierda. q₁* se ubica donde IMg₁ = c.",no:"Incorrecto. El desplazamiento de la demanda residual es consecuencia directa de la producción ya colocada por la empresa 2, no de precios ni cuotas gubernamentales."},
+  q10:{ok:"Correcto. En Cournot cada empresa ejerce poder de mercado (P > c) y restringe producción, pero la rivalidad las empuja a producir más que un monopolista. El resultado está entre ambos extremos con pérdida de eficiencia menor que en monopolio.",no:"Incorrecto. No existe acuerdo ni regulación que fije la cantidad. El resultado intermedio emerge del equilibrio de Nash donde cada empresa maximiza su beneficio individual."},
+  q11:{ok:"Correcto. El proceso es la dinámica de mejor respuesta iterada: partiendo de q₂⁰, cada empresa responde a la cantidad de la rival sucesivamente. Las flechas convergen hacia E (Nash-Cournot), donde ninguna firma tiene incentivo a cambiar.",no:"Incorrecto. En Cournot no hay negociación ni intervención externa. Las flechas ilustran el ajuste automático de cada empresa a la cantidad observada de su rival."}
+};
+
+let answered={}, correct=0, total=11;
+
+function ans(btn, isOk, qId){
+  if(answered[qId]) return;
+  answered[qId]=true;
+  correct += isOk ? 1 : 0;
+  btn.closest('ul').querySelectorAll('button').forEach(b=>b.disabled=true);
+  btn.classList.add(isOk?'correct':'wrong');
+  const fb=document.getElementById('fb-'+qId);
+  fb.textContent=(isOk?'✓ ':'✗ ')+FBK[qId][isOk?'ok':'no'];
+  fb.className='feedback show '+(isOk?'ok':'no');
+  document.getElementById('sdisplay').textContent=correct+' / '+total;
+  document.getElementById('sprog').style.width=Math.round(correct/total*100)+'%';
+  if(Object.keys(answered).length===total){
+    const el=document.getElementById('final');
+    el.style.display='block';
+    document.getElementById('final-score').textContent=correct+' / '+total;
+    const pct=Math.round(correct/total*100);
+    let msg='';
+    if(pct===100) msg='Perfecto. Dominas completamente el modelo de Cournot.';
+    else if(pct>=80) msg='Muy bien. Tienes una comprensión sólida del modelo.';
+    else if(pct>=60) msg='Bien. Repasa los conceptos de función de reacción y equilibrio de Nash-Cournot.';
+    else msg='Sigue estudiando. Revisa especialmente las funciones de reacción y la comparación entre estructuras de mercado.';
+    document.getElementById('final-msg').textContent=msg;
+    el.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+}
+</script>
+</body>
+</html>
